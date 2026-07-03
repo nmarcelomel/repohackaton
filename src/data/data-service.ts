@@ -1,5 +1,5 @@
 import mockData from "./mock-data.json";
-import type { MockData, Team, User, Initiative, Kudos } from "../types";
+import type { MockData, Team, User, Initiative, Kudos, MoodHistory, WellnessSuggestion } from "../types";
 
 const data: MockData = mockData as MockData;
 
@@ -21,6 +21,26 @@ export function getInitiatives(): Initiative[] {
 /** Obtiene todos los kudos. */
 export function getKudos(): Kudos[] {
  return data.kudos;
+}
+
+/** Obtiene el historial de ánimo semanal. */
+export function getMoodHistory(): MoodHistory[] {
+ return data.moodHistory;
+}
+
+/** Obtiene el historial de ánimo por equipo. */
+export function getMoodHistoryByTeam(teamId: string): MoodHistory[] {
+ return data.moodHistory.filter((m) => m.teamId === teamId);
+}
+
+/** Obtiene sugerencias de bienestar. */
+export function getWellnessSuggestions(): WellnessSuggestion[] {
+ return data.wellnessSuggestions;
+}
+
+/** Obtiene sugerencias por equipo. */
+export function getWellnessSuggestionsByTeam(teamId: string): WellnessSuggestion[] {
+ return data.wellnessSuggestions.filter((s) => s.teamId === teamId);
 }
 
 /** Obtiene un equipo por ID. */
