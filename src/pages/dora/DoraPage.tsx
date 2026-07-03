@@ -1,3 +1,4 @@
+import { Chip } from "../../shared/Chip";
 import { useState, useEffect } from "react";
 import { fetchAllDora, fetchTeams, type ApiDoraSummary, type ApiTeam } from "../../data/api-client";
 import "../../shared/ChartSetup";
@@ -66,7 +67,7 @@ export function DoraPage() {
   <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
    {/* Header */}
    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-    <h1 className="sb-ui-heading-h4">DORA Metrics</h1>
+    <h1 className="sb-ui-heading-h4">Métricas DORA</h1>
     <div className="sb-ui-input-container" style={{ minWidth: "220px" }}>
      <label className="sb-ui-input-label" htmlFor="team-dora">Célula</label>
      <select id="team-dora" className="sb-ui-select" value={selectedTeam} onChange={(e) => setSelectedTeam(e.target.value)}>
@@ -90,11 +91,11 @@ export function DoraPage() {
      {/* 5 Metric Cards */}
      <div className="sb-ui-grid">
       {[
-       { label: "Deployment Frequency", value: current.current.deployment_frequency, unit: "despliegues/sem", trend: current.trend.map(t => t.deployment_frequency), lower_better: false },
-       { label: "Lead Time for Changes", value: current.current.lead_time_hours, unit: "horas", trend: current.trend.map(t => t.lead_time_hours), lower_better: true },
-       { label: "Change Failure Rate", value: current.current.change_failure_rate, unit: "%", trend: current.trend.map(t => t.change_failure_rate), lower_better: true },
+       { label: "Frecuencia de Despliegue", value: current.current.deployment_frequency, unit: "despliegues/sem", trend: current.trend.map(t => t.deployment_frequency), lower_better: false },
+       { label: "Tiempo de Entrega", value: current.current.lead_time_hours, unit: "horas", trend: current.trend.map(t => t.lead_time_hours), lower_better: true },
+       { label: "Tasa de Fallos", value: current.current.change_failure_rate, unit: "%", trend: current.trend.map(t => t.change_failure_rate), lower_better: true },
        { label: "MTTR", value: current.current.mttr_hours, unit: "horas", trend: current.trend.map(t => t.mttr_hours), lower_better: true },
-       { label: "Deployment Rework Rate", value: current.current.deployment_rework_rate, unit: "%", trend: current.trend.map(t => t.deployment_rework_rate), lower_better: true },
+       { label: "Tasa de Retrabajo", value: current.current.deployment_rework_rate, unit: "%", trend: current.trend.map(t => t.deployment_rework_rate), lower_better: true },
       ].map((metric) => {
        const improving = metric.trend.length >= 2 && (metric.lower_better
         ? metric.trend[metric.trend.length - 1] < metric.trend[0]
@@ -132,17 +133,17 @@ export function DoraPage() {
 
      {/* Charts Section */}
      <div className="sb-ui-grid">
-      {/* Deployment Frequency Bar Chart */}
+      {/* Frecuencia de Despliegue Bar Chart */}
       <div className="sb-ui-col-12 sb-ui-col-md-6" style={{ marginBottom: "1rem" }}>
        <article className="sb-ui-card sb-ui-card--elevated">
         <div className="sb-ui-card__content">
-         <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.75rem" }}>Deployment Frequency (4 semanas)</h3>
+         <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.75rem" }}>Frecuencia de Despliegue (4 semanas)</h3>
          <div style={{ height: "250px" }}>
           <Bar
            data={{
             labels: current.trend.map(t => t.week_start),
             datasets: [{
-             label: "Deploys/semana",
+             label: "Despliegues/semana",
              data: current.trend.map(t => t.deployment_frequency),
              backgroundColor: "#00A651",
              borderRadius: 4,
@@ -155,17 +156,17 @@ export function DoraPage() {
        </article>
       </div>
 
-      {/* Lead Time Line Chart */}
+      {/* Tiempo Entrega Line Chart */}
       <div className="sb-ui-col-12 sb-ui-col-md-6" style={{ marginBottom: "1rem" }}>
        <article className="sb-ui-card sb-ui-card--elevated">
         <div className="sb-ui-card__content">
-         <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.75rem" }}>Lead Time for Changes (4 semanas)</h3>
+         <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.75rem" }}>Tiempo de Entrega (4 semanas)</h3>
          <div style={{ height: "250px" }}>
           <Line
            data={{
             labels: current.trend.map(t => t.week_start),
             datasets: [{
-             label: "Lead Time (horas)",
+             label: "Tiempo Entrega (horas)",
              data: current.trend.map(t => t.lead_time_hours),
              borderColor: "#2196F3",
              backgroundColor: "rgba(33,150,243,0.1)",
@@ -199,7 +200,7 @@ export function DoraPage() {
       </div>
      </div>
 
-     {/* Trend Table */}
+     {/* Tendencia Table */}
      <article className="sb-ui-card sb-ui-card--elevated">
       <div className="sb-ui-card__content">
        <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "1rem" }}>Tendencia últimas 4 semanas</h3>
@@ -207,11 +208,11 @@ export function DoraPage() {
         <thead>
          <tr>
           <th>Semana</th>
-          <th>Deploy Freq</th>
-          <th>Lead Time</th>
+          <th>Frec. Despliegue</th>
+          <th>Tiempo Entrega</th>
           <th>CFR</th>
           <th>MTTR</th>
-          <th>Rework</th>
+          <th>Retrabajo</th>
          </tr>
         </thead>
         <tbody>
@@ -225,6 +226,71 @@ export function DoraPage() {
            <td>{row.deployment_rework_rate}%</td>
           </tr>
          ))}
+        </tbody>
+       </table>
+      </div>
+     </article>
+
+     {/* Metas del Trimestre */}
+     <article className="sb-ui-card sb-ui-card--elevated">
+      <div className="sb-ui-card__content">
+       <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "1rem" }}>
+        <i className="fa-solid fa-bullseye" style={{ marginRight: "0.5rem", color: "#009056" }} />
+        Metas del Trimestre
+       </h3>
+       <table className="sb-ui-table sb-ui-table--striped sb-ui-table--hover">
+        <thead>
+         <tr>
+          <th>Métrica</th>
+          <th>Actual</th>
+          <th>Meta</th>
+          <th>Progreso</th>
+          <th>Estado</th>
+         </tr>
+        </thead>
+        <tbody>
+         {(() => {
+          const goals = [
+           { metric: "Deploy Frequency", actual: current.current.deployment_frequency, meta: 15, unit: "/sem", lowerBetter: false },
+           { metric: "Lead Time", actual: current.current.lead_time_hours, meta: 4, unit: "h", lowerBetter: true },
+           { metric: "Change Failure Rate", actual: current.current.change_failure_rate, meta: 5, unit: "%", lowerBetter: true },
+           { metric: "MTTR", actual: current.current.mttr_hours, meta: 1, unit: "h", lowerBetter: true },
+           { metric: "Rework Rate", actual: current.current.deployment_rework_rate, meta: 3, unit: "%", lowerBetter: true },
+          ];
+
+          return goals.map((goal) => {
+           let ratio: number;
+           if (goal.lowerBetter) {
+            ratio = goal.actual <= goal.meta ? 1 : goal.meta / goal.actual;
+           } else {
+            ratio = goal.actual >= goal.meta ? 1 : goal.actual / goal.meta;
+           }
+           const pct = Math.min(100, Math.round(ratio * 100));
+           const met = goal.lowerBetter ? goal.actual <= goal.meta : goal.actual >= goal.meta;
+           const chipVariant = met ? "success" : pct >= 70 ? "warning" : "error";
+           const chipLabel = met ? "Cumplida" : pct >= 70 ? "En progreso" : "Requiere acción";
+           const barColor = met ? "#00A651" : pct >= 70 ? "#FFC107" : "#E53935";
+
+           return (
+            <tr key={goal.metric}>
+             <td><strong>{goal.metric}</strong></td>
+             <td>{goal.actual}{goal.unit}</td>
+             <td>{goal.meta}{goal.unit}</td>
+             <td style={{ minWidth: "140px" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+               <div style={{ flex: 1, height: "8px", backgroundColor: "#f0f0f0", borderRadius: "4px", overflow: "hidden" }}>
+                <div style={{ width: `${pct}%`, height: "100%", backgroundColor: barColor, borderRadius: "4px", transition: "width 0.3s" }} />
+               </div>
+               <span style={{ fontSize: "0.7rem", fontWeight: 600, minWidth: "30px" }}>{pct}%</span>
+              </div>
+             </td>
+             <td>
+              <Chip variant={chipVariant}>{chipLabel}</Chip>
+             </td>
+            </tr>
+           );
+          });
+         })()}
         </tbody>
        </table>
       </div>

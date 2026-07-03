@@ -1,3 +1,4 @@
+import { Chip } from "../../shared/Chip";
 import { useState, useEffect } from "react";
 import { fetchTeams, type ApiTeam } from "../../data/api-client";
 import "../../shared/ChartSetup";
@@ -40,7 +41,7 @@ export function RoiPage() {
 
  return (
   <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-   <h1 className="sb-ui-heading-h4">ROI & Value Stream Intelligence</h1>
+   <h1 className="sb-ui-heading-h4">ROI ROI & Value Stream Intelligence Flujo de Valor</h1>
 
    {/* KPI Summary Cards */}
    {roi && (
@@ -48,7 +49,7 @@ export function RoiPage() {
      <div className="sb-ui-col-12 sb-ui-col-md-4" style={{ marginBottom: "1rem" }}>
       <article className="sb-ui-card sb-ui-card--elevated">
        <div className="sb-ui-card__content" style={{ textAlign: "center" }}>
-        <p style={{ fontSize: "0.75rem", color: "#9E9E9E" }}>Engineering ROI Total</p>
+        <p style={{ fontSize: "0.75rem", color: "#9E9E9E" }}>ROI de Ingeniería Total</p>
         <p style={{ fontSize: "2rem", fontWeight: 700, color: roi.total_engineering_roi_pct >= 0 ? "#00A651" : "#E53935" }}>
          {roi.total_engineering_roi_pct}%
         </p>
@@ -66,7 +67,7 @@ export function RoiPage() {
      <div className="sb-ui-col-12 sb-ui-col-md-4" style={{ marginBottom: "1rem" }}>
       <article className="sb-ui-card sb-ui-card--elevated">
        <div className="sb-ui-card__content" style={{ textAlign: "center" }}>
-        <p style={{ fontSize: "0.75rem", color: "#9E9E9E" }}>Deployments / Mes (Total)</p>
+        <p style={{ fontSize: "0.75rem", color: "#9E9E9E" }}>Despliegues / Mes (Total)</p>
         <p style={{ fontSize: "2rem", fontWeight: 700, color: "#333" }}>{roi.teams.reduce((s, t) => s + t.deployments_month, 0)}</p>
        </div>
       </article>
@@ -77,17 +78,17 @@ export function RoiPage() {
    {/* Charts Row */}
    {roi && (
     <div className="sb-ui-grid">
-     {/* Cost per Deployment Bar Chart */}
+     {/* Costo por Despliegue Bar Chart */}
      <div className="sb-ui-col-12 sb-ui-col-md-6" style={{ marginBottom: "1rem" }}>
       <article className="sb-ui-card sb-ui-card--elevated">
        <div className="sb-ui-card__content">
-        <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.75rem" }}>Cost per Deployment</h3>
+        <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.75rem" }}>Costo por Despliegue</h3>
         <div style={{ height: "250px" }}>
          <Bar
           data={{
            labels: roi.teams.map(t => t.team_name),
            datasets: [{
-            label: "$/Deploy",
+            label: "$/Despliegue",
             data: roi.teams.map(t => t.cost_per_deployment),
             backgroundColor: "#2196F3",
             borderRadius: 4,
@@ -139,7 +140,7 @@ export function RoiPage() {
      <div className="sb-ui-card__content">
       <h3 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "1rem" }}>ROI por Célula</h3>
       <table className="sb-ui-table sb-ui-table--striped sb-ui-table--hover">
-       <thead><tr><th>Célula</th><th>Costo/Mes</th><th>Deploys/Mes</th><th>Costo/Deploy</th><th>Ahorro IA</th><th>ROI</th></tr></thead>
+       <thead><tr><th>Célula</th><th>Costo/Mes</th><th>Despliegues/Mes</th><th>Costo/Despliegue</th><th>Ahorro IA</th><th>ROI</th></tr></thead>
        <tbody>
         {roi.teams.map(t => (
          <tr key={t.team_id}>
@@ -157,11 +158,11 @@ export function RoiPage() {
     </article>
    )}
 
-   {/* Value Stream Map */}
+   {/* Mapa de Flujo de Valor */}
    <article className="sb-ui-card sb-ui-card--elevated">
     <div className="sb-ui-card__content">
      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
-      <h3 style={{ fontSize: "1rem", fontWeight: 600 }}>Value Stream Map</h3>
+      <h3 style={{ fontSize: "1rem", fontWeight: 600 }}>Mapa de Flujo de Valor</h3>
       <div className="sb-ui-input-container" style={{ minWidth: "200px" }}>
        <select className="sb-ui-select" value={vsTeam} onChange={e => setVsTeam(e.target.value)}>
         {teams.map(t => <option key={t.id} value={t.id}>{t.name}</option>)}
@@ -195,9 +196,9 @@ export function RoiPage() {
         })}
        </div>
        <div style={{ display: "flex", gap: "2rem", fontSize: "0.875rem" }}>
-        <span>Lead Time Total: <strong>{vs.total_lead_time_hours}h</strong></span>
-        <span>Flow Efficiency: <strong style={{ color: "#00A651" }}>{vs.flow_efficiency_pct}%</strong></span>
-        <span>Bottleneck: <strong style={{ color: "#E53935" }}>{vs.bottleneck}</strong></span>
+        <span>Tiempo Total: <strong>{vs.total_lead_time_hours}h</strong></span>
+        <span>Eficiencia de Flujo: <strong style={{ color: "#00A651" }}>{vs.flow_efficiency_pct}%</strong></span>
+        <span>Cuello de Botella: <strong style={{ color: "#E53935" }}>{vs.bottleneck}</strong></span>
        </div>
       </>
      )}
@@ -207,9 +208,9 @@ export function RoiPage() {
    {/* Health Scores */}
    <article className="sb-ui-card sb-ui-card--elevated">
     <div className="sb-ui-card__content">
-     <h3 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "1rem" }}>Health Score Compuesto (0-100)</h3>
+     <h3 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "1rem" }}>Puntaje de Salud Compuesto (0-100)</h3>
      <table className="sb-ui-table sb-ui-table--striped sb-ui-table--hover">
-      <thead><tr><th>#</th><th>Célula</th><th>Score</th><th>DORA</th><th>Flow</th><th>DevEx</th><th>WIP</th><th>Predict.</th><th>Prioridad</th></tr></thead>
+      <thead><tr><th>#</th><th>Célula</th><th>Puntaje</th><th>DORA</th><th>Flujo</th><th>DevEx</th><th>WIP</th><th>Predic.</th><th>Prioridad</th></tr></thead>
       <tbody>
        {health.map((h, i) => (
         <tr key={h.team_id}>
@@ -228,7 +229,7 @@ export function RoiPage() {
          <td>{h.devex_score}</td>
          <td>{h.wip_score}</td>
          <td>{h.predictability_score}</td>
-         <td><span className="sb-ui-badge sb-ui-badge--warning"><i className="fa-solid fa-arrow-up" style={{ marginRight: "4px", fontSize: "0.6rem" }} />{h.priority_area === "Flow" ? "Flujo" : h.priority_area === "DORA" ? "DORA" : h.priority_area === "DevEx" ? "DevEx" : h.priority_area === "WIP" ? "WIP" : "Predictab."}</span></td>
+         <td><span className="sb-ui-badge sb-ui-badge--warning"><i className="fa-solid fa-arrow-up" style={{ marginRight: "4px", fontSize: "0.6rem" }} />{h.priority_area === "Flow" ? "Flujo" : h.priority_area === "DORA" ? "DORA" : h.priority_area === "DevEx" ? "DevEx" : h.priority_area === "WIP" ? "WIP" : "Predic."}</span></td>
         </tr>
        ))}
       </tbody>

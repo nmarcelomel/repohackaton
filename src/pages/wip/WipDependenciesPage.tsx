@@ -1,3 +1,4 @@
+import { Chip } from "../../shared/Chip";
 import { useState, useEffect } from "react";
 import { fetchWipStatus, fetchDependencies, resolveDependency, type ApiWipStatus, type ApiDependency } from "../../data/api-client";
 import { ConfirmDialog } from "../../shared/ConfirmDialog";
@@ -66,7 +67,7 @@ export function WipDependenciesPage() {
 
       {/* WIP Status */}
       <section>
-        <h2 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "1rem" }}>Work In Progress por Célula</h2>
+        <h2 style={{ fontSize: "1rem", fontWeight: 600, marginBottom: "1rem" }}>Trabajo en Progreso por Célula</h2>
         <div className="sb-ui-grid">
           {wips.map((wip) => {
             const pct = Math.min(wip.utilization_pct, 100);
@@ -101,8 +102,8 @@ export function WipDependenciesPage() {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1rem" }}>
           <h2 style={{ fontSize: "1rem", fontWeight: 600 }}>Dependencias entre Células</h2>
           <div style={{ display: "flex", gap: "0.5rem" }}>
-            <span className="sb-ui-badge sb-ui-badge--error">{pendingDeps.length} pendientes</span>
-            <span className="sb-ui-badge sb-ui-badge--success">{deps.length - pendingDeps.length} resueltas</span>
+            <Chip variant="error">{pendingDeps.length} pendientes</Chip>
+            <Chip variant="success">{deps.length - pendingDeps.length} resueltas</Chip>
           </div>
         </div>
 
@@ -137,9 +138,9 @@ export function WipDependenciesPage() {
                     </td>
                     <td>
                       {d.is_resolved ? (
-                        <span className="sb-ui-badge sb-ui-badge--success">Resuelto</span>
+                        <Chip variant="success">Resuelto</Chip>
                       ) : (
-                        <span className="sb-ui-badge sb-ui-badge--error">Pendiente</span>
+                        <Chip variant="error">Pendiente</Chip>
                       )}
                     </td>
                     <td>

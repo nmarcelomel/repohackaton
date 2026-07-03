@@ -33,7 +33,7 @@ export function FlowPage() {
  return (
   <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-    <h1 className="sb-ui-heading-h4">Flow Metrics & Cycle Time</h1>
+    <h1 className="sb-ui-heading-h4">Flujo Flow Metrics & Tiempo de Ciclo Ciclo de Entrega</h1>
     <div className="sb-ui-input-container" style={{ minWidth: "220px" }}>
      <label className="sb-ui-input-label" htmlFor="team-flow">Célula</label>
      <select id="team-flow" className="sb-ui-select" value={selectedTeam} onChange={(e) => setSelectedTeam(e.target.value)}>
@@ -44,12 +44,12 @@ export function FlowPage() {
 
    {metrics && (
     <>
-     {/* Cycle Time Percentiles */}
+     {/* Tiempo de Ciclo Percentiles */}
      <div className="sb-ui-grid">
       <div className="sb-ui-col-12 sb-ui-col-md-4" style={{ marginBottom: "1rem" }}>
        <article className="sb-ui-card sb-ui-card--elevated">
         <div className="sb-ui-card__content" style={{ textAlign: "center" }}>
-         <p style={{ fontSize: "0.75rem", color: "#9E9E9E" }}>Cycle Time P50</p>
+         <p style={{ fontSize: "0.75rem", color: "#9E9E9E" }}>Tiempo de Ciclo P50</p>
          <p style={{ fontSize: "2rem", fontWeight: 700, color: "#00A651" }}>{metrics.cycle_time.p50}h</p>
         </div>
        </article>
@@ -57,7 +57,7 @@ export function FlowPage() {
       <div className="sb-ui-col-12 sb-ui-col-md-4" style={{ marginBottom: "1rem" }}>
        <article className="sb-ui-card sb-ui-card--elevated">
         <div className="sb-ui-card__content" style={{ textAlign: "center" }}>
-         <p style={{ fontSize: "0.75rem", color: "#9E9E9E" }}>Cycle Time P85</p>
+         <p style={{ fontSize: "0.75rem", color: "#9E9E9E" }}>Tiempo de Ciclo P85</p>
          <p style={{ fontSize: "2rem", fontWeight: 700, color: "#FFC107" }}>{metrics.cycle_time.p85}h</p>
         </div>
        </article>
@@ -65,7 +65,7 @@ export function FlowPage() {
       <div className="sb-ui-col-12 sb-ui-col-md-4" style={{ marginBottom: "1rem" }}>
        <article className="sb-ui-card sb-ui-card--elevated">
         <div className="sb-ui-card__content" style={{ textAlign: "center" }}>
-         <p style={{ fontSize: "0.75rem", color: "#9E9E9E" }}>Cycle Time P95</p>
+         <p style={{ fontSize: "0.75rem", color: "#9E9E9E" }}>Tiempo de Ciclo P95</p>
          <p style={{ fontSize: "2rem", fontWeight: 700, color: "#E53935" }}>{metrics.cycle_time.p95}h</p>
         </div>
        </article>
@@ -75,7 +75,7 @@ export function FlowPage() {
      {/* Histogram Bar Chart */}
      <article className="sb-ui-card sb-ui-card--elevated">
       <div className="sb-ui-card__content">
-       <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "1rem" }}>Histograma de Cycle Time</h3>
+       <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "1rem" }}>Histograma de Tiempo de Ciclo</h3>
        <div style={{ height: "250px" }}>
         {(() => {
          const values = metrics.cycle_time.histogram;
@@ -106,10 +106,10 @@ export function FlowPage() {
       </div>
      </article>
 
-     {/* Throughput Line Chart */}
+     {/* Rendimiento Line Chart */}
      <article className="sb-ui-card sb-ui-card--elevated">
       <div className="sb-ui-card__content">
-       <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "1rem" }}>Throughput Semanal</h3>
+       <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "1rem" }}>Rendimiento Semanal</h3>
        <div style={{ height: "250px" }}>
         <Line
          data={{
@@ -134,17 +134,17 @@ export function FlowPage() {
      {/* CFD Stacked Bar Chart */}
      <article className="sb-ui-card sb-ui-card--elevated">
       <div className="sb-ui-card__content">
-       <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "1rem" }}>Cumulative Flow Diagram</h3>
+       <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "1rem" }}>Diagrama de Flujo Acumulado</h3>
        <div style={{ height: "300px" }}>
         <Bar
          data={{
           labels: metrics.cfd.map(p => p.date.slice(5)),
           datasets: [
-           { label: "Done", data: metrics.cfd.map(p => p.done), backgroundColor: "#00A651" },
-           { label: "Testing", data: metrics.cfd.map(p => p.testing), backgroundColor: "#2196F3" },
-           { label: "Review", data: metrics.cfd.map(p => p.review), backgroundColor: "#FFC107" },
-           { label: "In Progress", data: metrics.cfd.map(p => p.in_progress), backgroundColor: "#FF9800" },
-           { label: "Backlog", data: metrics.cfd.map(p => p.backlog), backgroundColor: "#9E9E9E" },
+           { label: "Completado", data: metrics.cfd.map(p => p.done), backgroundColor: "#00A651" },
+           { label: "Pruebas", data: metrics.cfd.map(p => p.testing), backgroundColor: "#2196F3" },
+           { label: "Revisión", data: metrics.cfd.map(p => p.review), backgroundColor: "#FFC107" },
+           { label: "En Progreso", data: metrics.cfd.map(p => p.in_progress), backgroundColor: "#FF9800" },
+           { label: "Pendiente", data: metrics.cfd.map(p => p.backlog), backgroundColor: "#9E9E9E" },
           ],
          }}
          options={{
@@ -161,11 +161,11 @@ export function FlowPage() {
      {/* AI Impact */}
      <article className="sb-ui-card sb-ui-card--elevated">
       <div className="sb-ui-card__content">
-       <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "1rem" }}>Impacto IA en Cycle Time</h3>
+       <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "1rem" }}>Impacto IA en Tiempo de Ciclo</h3>
        <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
         <div>
          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.875rem", marginBottom: "4px" }}>
-          <span>Cycle Time con Asistencia IA</span>
+          <span>Tiempo de Ciclo con Asistencia IA</span>
           <strong style={{ color: "#00A651" }}>{metrics.ai_cycle_time_avg}h</strong>
          </div>
          <div style={{ width: "100%", height: "24px", borderRadius: "4px", backgroundColor: "#E0E0E0", overflow: "hidden" }}>
@@ -174,7 +174,7 @@ export function FlowPage() {
         </div>
         <div>
          <div style={{ display: "flex", justifyContent: "space-between", fontSize: "0.875rem", marginBottom: "4px" }}>
-          <span>Cycle Time Tradicional</span>
+          <span>Tiempo de Ciclo Tradicional</span>
           <strong style={{ color: "#9E9E9E" }}>{metrics.traditional_cycle_time_avg}h</strong>
          </div>
          <div style={{ width: "100%", height: "24px", borderRadius: "4px", backgroundColor: "#9E9E9E", overflow: "hidden" }}>
@@ -186,17 +186,17 @@ export function FlowPage() {
         <i className="fa-solid fa-bolt" style={{ color: "#00A651", marginRight: "4px" }} />
         Reducción: <strong style={{ color: "#00A651" }}>{metrics.traditional_cycle_time_avg > 0 ? Math.round(((metrics.traditional_cycle_time_avg - metrics.ai_cycle_time_avg) / metrics.traditional_cycle_time_avg) * 100) : 0}%</strong>
        </p>
-       <p style={{ fontSize: "0.75rem", color: "#9E9E9E", marginTop: "0.25rem" }}>Flow Efficiency: {metrics.flow_efficiency_pct}%</p>
+       <p style={{ fontSize: "0.75rem", color: "#9E9E9E", marginTop: "0.25rem" }}>Eficiencia de Flujo: {metrics.flow_efficiency_pct}%</p>
       </div>
      </article>
 
-     {/* Lead Time Breakdown */}
+     {/* Desglose de Tiempo de Entrega */}
      {leadTime && (
       <article className="sb-ui-card sb-ui-card--elevated">
        <div className="sb-ui-card__content">
         <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.5rem" }}>
          <i className="fa-solid fa-layer-group" style={{ marginRight: "0.5rem", color: "#2196F3" }} />
-         Lead Time Breakdown
+         Desglose de Tiempo de Entrega
         </h3>
         <p style={{ fontSize: "0.75rem", color: "#9E9E9E", marginBottom: "1rem" }}>
          {leadTime.items_analyzed} items analizados — Total avg: {leadTime.total_avg_lead_time_hours.toFixed(1)}h
@@ -205,9 +205,9 @@ export function FlowPage() {
         {(() => {
          const total = leadTime.total_avg_lead_time_hours || 1;
          const stages = [
-          { label: "Concept → Commit", hours: leadTime.avg_concept_to_commit_hours, color: "#2196F3" },
-          { label: "Commit → Deploy", hours: leadTime.avg_commit_to_deploy_hours, color: "#FF9800" },
-          { label: "Deploy → Value", hours: leadTime.avg_deploy_to_value_hours, color: "#009056" },
+          { label: "Concepto → Código", hours: leadTime.avg_concept_to_commit_hours, color: "#2196F3" },
+          { label: "Código → Despliegue", hours: leadTime.avg_commit_to_deploy_hours, color: "#FF9800" },
+          { label: "Despliegue → Valor", hours: leadTime.avg_deploy_to_value_hours, color: "#009056" },
          ];
          return (
           <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>

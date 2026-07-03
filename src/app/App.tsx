@@ -9,9 +9,11 @@ import { DemandPage } from "../pages/demand/DemandPage";
 import { CapacityPage } from "../pages/capacity/CapacityPage";
 import { WipDependenciesPage } from "../pages/wip/WipDependenciesPage";
 import { DevExPage } from "../pages/devex/DevExPage";
-import { ExecutiveReportPage } from "../pages/report/ExecutiveReportPage";
 import { PredictabilityPage } from "../pages/predictability/PredictabilityPage";
 import { RoiPage } from "../pages/roi/RoiPage";
+import { BienestarPage } from "../pages/bienestar/BienestarPage";
+import { TalentoPage } from "../pages/talento/TalentoPage";
+import { ComparativaPage } from "../pages/comparativa/ComparativaPage";
 
 const router = createBrowserRouter([
  {
@@ -33,9 +35,11 @@ const router = createBrowserRouter([
      { path: "capacity", element: <CapacityPage /> },
      { path: "wip", element: <WipDependenciesPage /> },
      { path: "devex", element: <DevExPage /> },
-     { path: "report", element: <ExecutiveReportPage /> },
      { path: "predictability", element: <PredictabilityPage /> },
      { path: "roi", element: <RoiPage /> },
+     { path: "bienestar", element: <BienestarPage /> },
+     { path: "talento", element: <TalentoPage /> },
+     { path: "comparativa", element: <ComparativaPage /> },
     ],
    },
   ],

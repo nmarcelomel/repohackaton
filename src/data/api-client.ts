@@ -20,7 +20,9 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
  const res = await fetch(`${API_BASE}${path}`, { ...options, headers: { ...headers, ...options.headers } });
  if (!res.ok) {
   const error = await res.json().catch(() => ({ detail: "Error de red" }));
-  throw new Error(error.detail || `HTTP ${res.status}`);
+  const detail = error.detail;
+  const message = typeof detail === "string" ? detail : Array.isArray(detail) ? detail.map((d: { msg?: string }) => d.msg || "Error").join(". ") : `HTTP ${res.status}`;
+  throw new Error(message);
  }
  if (res.status === 204) return undefined as T;
  return res.json();
@@ -72,14 +74,14 @@ export async function fetchDashboard(): Promise<ApiDashboard> {
 
 // === DevEx ===
 export interface ApiDevExPayload {
+ user_id: string;
  team_id: string;
- respondent_alias: string;
+ period: string;
  facilidad_deploy: number;
- claridad_requerimientos: number;
- autonomia_equipo: number;
+ feedback_pr: number;
+ interrupciones: number;
+ claridad_reqs: number;
  satisfaccion_herramientas: number;
- carga_cognitiva: number;
- [key: string]: string | number;
 }
 export async function submitDevEx(data: ApiDevExPayload): Promise<unknown> {
  return request("/devex/responses", { method: "POST", body: JSON.stringify(data) });
@@ -89,10 +91,10 @@ export interface ApiDevExResults {
  team_id: string;
  total_responses: number;
  avg_facilidad_deploy: number;
- avg_claridad_requerimientos: number;
- avg_autonomia_equipo: number;
+ avg_feedback_pr: number;
+ avg_interrupciones: number;
+ avg_claridad_reqs: number;
  avg_satisfaccion_herramientas: number;
- avg_carga_cognitiva: number;
  overall_score: number;
  [key: string]: string | number;
 }

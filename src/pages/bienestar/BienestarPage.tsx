@@ -131,7 +131,7 @@ function ExecutiveSummary({ teams }: { teams: Team[] }) {
         <div className="bg-white rounded-xl p-4 border border-bolivar-gray-light shadow-sm transition-all duration-500">
           <div className="flex items-center gap-2 mb-1">
             <Zap className="w-4 h-4 text-bolivar-green" />
-            <span className="text-xs text-gray-500 font-medium">Score Promedio</span>
+            <span className="text-xs text-gray-500 font-medium">Puntaje Promedio</span>
           </div>
           <p className={`text-3xl font-bold ${getScoreColor(avgScore)}`}>
             {avgScore}
@@ -296,7 +296,7 @@ function SustainabilityIndex({ teams }: { teams: Team[] }) {
                 <div className="mt-2 text-xs text-gray-500 space-y-0.5">
                   <p>Ánimo: {getAverageMood(team).toFixed(1)}/5</p>
                   <p>WIP: {team.wipCurrent}/{team.wipLimit}</p>
-                  <p>Deploy freq: {team.doraMetrics.deploymentFrequency}/sem</p>
+                  <p>Frec. despliegue: {team.doraMetrics.deploymentFrequency}/sem</p>
                 </div>
               </div>
             );

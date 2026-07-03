@@ -59,3 +59,24 @@ export function getObservabilityMetrics(teamId: string): ObservabilityMetrics | 
   traditionalCycleTime,
  };
 }
+
+/** Obtiene historial de mood por equipo (simulado). */
+export function getMoodHistoryByTeam(teamId: string) {
+ const team = data.teams.find((t) => t.id === teamId);
+ if (!team) return [];
+ return [
+  { week: "Sem 1", score: 3.8, avgMood: 3.8 },
+  { week: "Sem 2", score: 4.0, avgMood: 4.0 },
+  { week: "Sem 3", score: 3.6, avgMood: 3.6 },
+  { week: "Sem 4", score: 4.2, avgMood: 4.2 },
+ ];
+}
+
+/** Obtiene sugerencias de bienestar basadas en el mood del equipo. */
+export function getWellnessSuggestions(_teamId?: string) {
+ return [
+  { id: "1", title: "Implementar no-meeting day", category: "focus", impact: "alto", type: "warning", message: "WIP elevado puede causar agotamiento", action: "Considerar reducir el trabajo en progreso", teamId: "team-siniestros" },
+  { id: "2", title: "Sesión de retrospectiva de bienestar", category: "team", impact: "medio", type: "info", message: "El equipo reporta interrupciones frecuentes", action: "Implementar bloques de foco sin reuniones", teamId: "team-vida" },
+  { id: "3", title: "Reducir WIP para disminuir multitasking", category: "flow", impact: "alto", type: "critical", message: "Mood bajo detectado 2 semanas consecutivas", action: "Agendar 1-on-1 con cada miembro del equipo", teamId: "team-siniestros" },
+ ];
+}

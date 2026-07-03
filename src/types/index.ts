@@ -80,3 +80,14 @@ export interface MockData {
  initiatives: Initiative[];
  kudos: Kudos[];
 }
+
+export interface WellnessSuggestion {
+ id: string;
+ title: string;
+ category: string;
+ impact: string;
+ type: string;
+ message: string;
+ action: string;
+ teamId: string;
+}

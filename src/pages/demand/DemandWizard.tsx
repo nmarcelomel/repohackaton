@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { ApiTeam } from "../../data/api-client";
+import { Chip } from "../../shared/Chip";
 
 interface DemandFormData {
  team_id: string;
@@ -15,6 +16,12 @@ interface DemandFormData {
  regulatory: boolean;
  dependencies_count: number;
  priority_justification: string;
+ estimated_savings: string;
+ potential_revenue: string;
+ risk_if_not_done: string;
+ deadline: string;
+ affected_systems: string;
+ success_kpis: string;
 }
 
 interface DemandWizardProps {
@@ -42,9 +49,15 @@ export function DemandWizard({ teams, filterTeam, onSubmit, onCancel, creating, 
   regulatory: false,
   dependencies_count: 0,
   priority_justification: "",
+  estimated_savings: "",
+  potential_revenue: "",
+  risk_if_not_done: "bajo",
+  deadline: "",
+  affected_systems: "",
+  success_kpis: "",
  });
 
- const totalSteps = 4;
+ const totalSteps = 5;
  const wsjf = form.size > 0 ? ((form.business_value + form.urgency) / form.size).toFixed(2) : "—";
 
  function canAdvance(): boolean {
@@ -74,15 +87,15 @@ export function DemandWizard({ teams, filterTeam, onSubmit, onCancel, creating, 
       <h3 style={{ fontSize: "1.125rem", fontWeight: 700, margin: 0 }}>Nueva Solicitud de Demanda</h3>
       <p style={{ fontSize: "0.75rem", color: "#9E9E9E", margin: "0.25rem 0 0" }}>Paso {step} de {totalSteps}</p>
      </div>
-     <span className="sb-ui-badge sb-ui-badge--primary" style={{ fontSize: "0.875rem", padding: "0.5rem 1rem" }}>
-      <i className="fa-solid fa-hashtag" style={{ marginRight: "4px" }} />
+     <Chip variant="info">
+      <i className="fa-solid fa-hashtag" />
       SOL-{String(requestNumber).padStart(4, "0")}
-     </span>
+     </Chip>
     </div>
 
     {/* Stepper */}
     <div style={{ display: "flex", gap: "4px", marginBottom: "1.5rem" }}>
-     {[1, 2, 3, 4].map((s) => (
+     {[1, 2, 3, 4, 5].map((s) => (
       <div key={s} style={{ flex: 1, height: "4px", borderRadius: "2px", backgroundColor: s <= step ? "#00A651" : "#E0E0E0", transition: "background-color 0.3s" }} />
      ))}
     </div>
@@ -253,8 +266,66 @@ export function DemandWizard({ teams, filterTeam, onSubmit, onCancel, creating, 
      </div>
     )}
 
-    {/* Step 4: Resumen y Confirmación */}
+    {/* Step 4: Impacto y Riesgos */}
     {step === 4 && (
+     <div>
+      <h4 style={{ fontSize: "0.875rem", fontWeight: 600, color: "#333", marginBottom: "1rem" }}>
+       <i className="fa-solid fa-shield-halved" style={{ marginRight: "8px", color: "#00A651" }} />
+       Impacto, Riesgos y ROI Esperado
+      </h4>
+
+      <div className="sb-ui-grid">
+       <div className="sb-ui-col-12 sb-ui-col-md-6">
+        <div className="sb-ui-input-container">
+         <label className="sb-ui-input-label">Ahorro mensual estimado (USD)</label>
+         <input className="sb-ui-input" type="number" min="0" placeholder="Ej: 5000" value={form.estimated_savings || ""} onChange={(e) => setForm({ ...form, estimated_savings: e.target.value })} />
+         <span className="sb-ui-input-helper">Reducción de costos operativos mensual</span>
+        </div>
+       </div>
+       <div className="sb-ui-col-12 sb-ui-col-md-6">
+        <div className="sb-ui-input-container">
+         <label className="sb-ui-input-label">Ingreso potencial mensual (USD)</label>
+         <input className="sb-ui-input" type="number" min="0" placeholder="Ej: 15000" value={form.potential_revenue || ""} onChange={(e) => setForm({ ...form, potential_revenue: e.target.value })} />
+         <span className="sb-ui-input-helper">Nuevo ingreso habilitado por esta funcionalidad</span>
+        </div>
+       </div>
+       <div className="sb-ui-col-12 sb-ui-col-md-6">
+        <div className="sb-ui-input-container">
+         <label className="sb-ui-input-label">Riesgo si NO se implementa</label>
+         <select className="sb-ui-select" value={form.risk_if_not_done || "bajo"} onChange={(e) => setForm({ ...form, risk_if_not_done: e.target.value })}>
+          <option value="bajo">Bajo — Sin impacto inmediato</option>
+          <option value="medio">Medio — Pérdida de competitividad</option>
+          <option value="alto">Alto — Pérdida de clientes/ingresos</option>
+          <option value="critico">Crítico — Multa regulatoria / incumplimiento</option>
+         </select>
+        </div>
+       </div>
+       <div className="sb-ui-col-12 sb-ui-col-md-6">
+        <div className="sb-ui-input-container">
+         <label className="sb-ui-input-label">Fecha límite esperada</label>
+         <input className="sb-ui-input" type="date" value={form.deadline || ""} onChange={(e) => setForm({ ...form, deadline: e.target.value })} />
+         <span className="sb-ui-input-helper">¿Hay una fecha comprometida con el negocio?</span>
+        </div>
+       </div>
+       <div className="sb-ui-col-12">
+        <div className="sb-ui-input-container">
+         <label className="sb-ui-input-label">Sistemas o APIs que se afectan</label>
+         <input className="sb-ui-input" placeholder="Ej: Core de emisión, API de pagos, Portal web" value={form.affected_systems || ""} onChange={(e) => setForm({ ...form, affected_systems: e.target.value })} />
+         <span className="sb-ui-input-helper">Lista de sistemas que requieren cambios o integraciones</span>
+        </div>
+       </div>
+       <div className="sb-ui-col-12">
+        <div className="sb-ui-input-container">
+         <label className="sb-ui-input-label">KPIs de éxito (¿cómo medimos que funcionó?)</label>
+         <textarea className="sb-ui-input" style={{ minHeight: "70px", resize: "vertical" }} placeholder="Ej: Reducir tiempo de emisión de 15 min a 3 min. Aumentar conversión web en 20%." value={form.success_kpis || ""} onChange={(e) => setForm({ ...form, success_kpis: e.target.value })} />
+        </div>
+       </div>
+      </div>
+     </div>
+    )}
+
+    {/* Step 5: Resumen y Confirmación */}
+    {step === 5 && (
      <div>
       <h4 style={{ fontSize: "0.875rem", fontWeight: 600, color: "#333", marginBottom: "1rem" }}>
        <i className="fa-solid fa-clipboard-check" style={{ marginRight: "8px", color: "#00A651" }} />

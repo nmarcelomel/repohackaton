@@ -1,3 +1,4 @@
+import { Chip } from "../../shared/Chip";
 import { useState, useEffect } from "react";
 import { fetchCapacity, fetchAllocation, fetchTeams, type ApiCapacity, type ApiAllocation, type ApiTeam } from "../../data/api-client";
 import "../../shared/ChartSetup";
@@ -26,7 +27,7 @@ export function CapacityPage() {
  }
 
  const overloaded = capacity.filter((c) => c.alert === "overloaded");
- const underutilized = capacity.filter((c) => c.alert === "underutilized");
+ const subutilizado = capacity.filter((c) => c.alert === "subutilizado");
 
  // Grouped Bar: Capacity vs Committed
  const capacityBarData = {
@@ -51,7 +52,7 @@ export function CapacityPage() {
  const latestAllocation = allocations.length > 0 ? allocations[allocations.length - 1] : null;
 
  const allocationDoughnutData = latestAllocation ? {
-  labels: ["Features", "Defects", "Tech Debt", "Risk/Compliance"],
+  labels: ["Funcionalidades", "Defectos", "Deuda Técnica", "Riesgo/Compliance"],
   datasets: [{
    data: [latestAllocation.features_pct, latestAllocation.defects_pct, latestAllocation.tech_debt_pct, latestAllocation.risk_compliance_pct],
    backgroundColor: ["#00A651", "#E53935", "#FFC107", "#2196F3"],
@@ -61,7 +62,7 @@ export function CapacityPage() {
 
  return (
   <div style={{ display: "flex", flexDirection: "column", gap: "1.5rem" }}>
-   <h1 className="sb-ui-heading-h4">Capacity vs Demand & Allocation</h1>
+   <h1 className="sb-ui-heading-h4">Capacidad vs Demanda Capacity vs Demand & Allocation Asignación</h1>
 
    {/* Alerts */}
    {overloaded.length > 0 && (
@@ -70,10 +71,10 @@ export function CapacityPage() {
      <span><strong>Sobrecarga ({">"}85%):</strong> {overloaded.map(c => c.team_name).join(", ")}</span>
     </div>
    )}
-   {underutilized.length > 0 && (
+   {subutilizado.length > 0 && (
     <div className="sb-ui-alert sb-ui-alert--warning">
      <i className="fa-solid fa-triangle-exclamation" />
-     <span><strong>Subutilización ({"<"}50%):</strong> {underutilized.map(c => c.team_name).join(", ")}</span>
+     <span><strong>Subutilización ({"<"}50%):</strong> {subutilizado.map(c => c.team_name).join(", ")}</span>
     </div>
    )}
 
@@ -109,16 +110,16 @@ export function CapacityPage() {
            <div style={{ flex: 1, height: "8px", borderRadius: "4px", backgroundColor: "#E0E0E0", overflow: "hidden" }}>
             <div style={{
              width: `${Math.min(c.utilization_pct, 100)}%`, height: "100%", borderRadius: "4px",
-             backgroundColor: c.alert === "overloaded" ? "#E53935" : c.alert === "underutilized" ? "#FFC107" : "#00A651"
+             backgroundColor: c.alert === "overloaded" ? "#E53935" : c.alert === "subutilizado" ? "#FFC107" : "#00A651"
             }} />
            </div>
            <span style={{ fontSize: "0.75rem", fontWeight: 700, minWidth: "40px" }}>{c.utilization_pct}%</span>
           </div>
          </td>
          <td>
-          {c.alert === "overloaded" && <span className="sb-ui-badge sb-ui-badge--error">Sobrecarga</span>}
-          {c.alert === "underutilized" && <span className="sb-ui-badge sb-ui-badge--warning">Subutilizado</span>}
-          {!c.alert && <span className="sb-ui-badge sb-ui-badge--success">Óptimo</span>}
+          {c.alert === "overloaded" && <Chip variant="error">Sobrecarga</Chip>}
+          {c.alert === "subutilizado" && <Chip variant="warning">Subutilizado</Chip>}
+          {!c.alert && <Chip variant="success">Óptimo</Chip>}
          </td>
         </tr>
        ))}
@@ -129,7 +130,7 @@ export function CapacityPage() {
 
    {/* Allocation Section */}
    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-    <h2 style={{ fontSize: "1rem", fontWeight: 600 }}>Allocation por Tipo de Trabajo</h2>
+    <h2 style={{ fontSize: "1rem", fontWeight: 600 }}>Asignación por Tipo de Trabajo</h2>
     <div className="sb-ui-input-container" style={{ minWidth: "200px" }}>
      <select className="sb-ui-select" value={selectedTeam} onChange={(e) => setSelectedTeam(e.target.value)}>
       {teams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
@@ -154,7 +155,7 @@ export function CapacityPage() {
         </div>
         {latestAllocation!.alert && (
          <div className="sb-ui-alert sb-ui-alert--warning" style={{ marginTop: "0.75rem" }}>
-          <span style={{ fontSize: "0.75rem" }}>⚠️ Tech Debt + Defects &gt; 40%</span>
+          <span style={{ fontSize: "0.75rem" }}>⚠️ Deuda Técnica + Defectos &gt; 40%</span>
          </div>
         )}
        </div>
@@ -166,7 +167,7 @@ export function CapacityPage() {
         <h3 style={{ fontSize: "0.875rem", fontWeight: 600, marginBottom: "0.75rem" }}>Histórico de Allocation</h3>
         <table className="sb-ui-table sb-ui-table--striped">
          <thead>
-          <tr><th>Periodo</th><th>Features</th><th>Defects</th><th>Debt</th><th>Risk</th></tr>
+          <tr><th>Periodo</th><th>Funcionalidades</th><th>Defectos</th><th>Debt</th><th>Riesgo</th></tr>
          </thead>
          <tbody>
           {allocations.map((alloc) => (
@@ -188,7 +189,7 @@ export function CapacityPage() {
 
    <div style={{ padding: "0.75rem", backgroundColor: "#f5f5f5", borderRadius: "8px" }}>
     <p style={{ fontSize: "0.75rem", color: "#666" }}>
-     <strong>Benchmark objetivo:</strong> 70% Features / 15% Tech Debt / 10% Defects / 5% Risk
+     <strong>Meta objetivo:</strong> 70% Funcionalidades / 15% Deuda Técnica / 10% Defectos / 5% Riesgo
     </p>
    </div>
   </div>
