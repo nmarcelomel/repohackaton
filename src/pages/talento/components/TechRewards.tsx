@@ -57,10 +57,10 @@ export function TechRewards() {
     <section>
       <div className="flex items-center gap-2 mb-1">
         <Award className="w-6 h-6 text-amber-600" />
-        <h3 className="text-xl font-bold text-gray-900">Tech Rewards</h3>
+        <h3 className="text-xl font-bold text-gray-900">Reconocimientos Técnicos</h3>
       </div>
       <p className="text-sm text-gray-500 mb-4">
-        Reconocimiento y Madurez Técnica por Equipos
+        Insignias de excelencia y madurez técnica por equipos
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

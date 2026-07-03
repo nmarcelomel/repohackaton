@@ -14,6 +14,8 @@ import {
   Shield,
   Users,
   Clock,
+  Moon,
+  Sun,
 } from "lucide-react";
 import {
   AreaChart,
@@ -22,7 +24,11 @@ import {
   YAxis,
   Tooltip,
   ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
 } from "recharts";
+import confetti from "canvas-confetti";
 import {
   getTeams,
   getUsers,
@@ -31,7 +37,7 @@ import {
   getWellnessSuggestions,
 } from "../../data/data-service";
 import type { Team, User, Kudos, WellnessSuggestion, MemberMood } from "../../types";
-import { getAverageMood, calculateHealthScore, isAtBurnoutRisk, getScoreColor, getScoreBg, getScoreLabel, getCategoryEmoji, getUserName } from "./bienestar.utils";
+import { MOOD_SCORE, getAverageMood, calculateHealthScore, isAtBurnoutRisk, getScoreColor, getScoreBg, getScoreLabel, getCategoryEmoji, getUserName } from "./bienestar.utils";
 
 /* ─── Tipos internos ─── */
 
@@ -369,30 +375,50 @@ function ActionSuggestions({ teams }: { teams: Team[] }) {
     return teams.find((t) => t.id === teamId)?.name || teamId;
   }
 
+  function getTeamScore(teamId: string): number {
+    const team = teams.find((t) => t.id === teamId);
+    return team ? calculateHealthScore(team) : 0;
+  }
+
   return (
     <section className="sb-ui-card sb-ui-card--elevated mb-6">
       <div className="sb-ui-card__content">
-        <div className="flex items-center gap-2 mb-4">
-          <Lightbulb className="w-5 h-5 text-amber-500" />
-          <h2 className="sb-ui-heading-h5">Sugerencias Inteligentes</h2>
-          <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full">IA</span>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Lightbulb className="w-5 h-5 text-amber-500" />
+            <h2 className="sb-ui-heading-h5">Sugerencias Inteligentes</h2>
+            <span className="text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-medium">IA</span>
+          </div>
+          <span className="text-xs text-gray-400">{suggestions.length} sugerencias activas</span>
         </div>
 
         {critical.length > 0 && (
-          <div className="space-y-2 mb-4">
-            <p className="text-xs font-semibold text-red-600 uppercase tracking-wide">Acciones urgentes</p>
-            {critical.map((s, i) => (
-              <SuggestionCard key={i} suggestion={s} teamName={getTeamName(s.teamId)} />
-            ))}
+          <div className="mb-5">
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
+              <p className="text-xs font-semibold text-red-600 uppercase tracking-wide">Acciones urgentes</p>
+              <span className="text-xs bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-medium">{critical.length}</span>
+            </div>
+            <div className="space-y-3">
+              {critical.map((s, i) => (
+                <SuggestionCard key={i} suggestion={s} teamName={getTeamName(s.teamId)} teamScore={getTeamScore(s.teamId)} />
+              ))}
+            </div>
           </div>
         )}
 
         {positive.length > 0 && (
-          <div className="space-y-2">
-            <p className="text-xs font-semibold text-green-600 uppercase tracking-wide">Oportunidades</p>
-            {positive.map((s, i) => (
-              <SuggestionCard key={i} suggestion={s} teamName={getTeamName(s.teamId)} />
-            ))}
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-2 h-2 rounded-full bg-green-500" />
+              <p className="text-xs font-semibold text-green-600 uppercase tracking-wide">Oportunidades de mejora</p>
+              <span className="text-xs bg-green-100 text-green-600 px-1.5 py-0.5 rounded font-medium">{positive.length}</span>
+            </div>
+            <div className="space-y-3">
+              {positive.map((s, i) => (
+                <SuggestionCard key={i} suggestion={s} teamName={getTeamName(s.teamId)} teamScore={getTeamScore(s.teamId)} />
+              ))}
+            </div>
           </div>
         )}
       </div>
@@ -400,17 +426,59 @@ function ActionSuggestions({ teams }: { teams: Team[] }) {
   );
 }
 
-function SuggestionCard({ suggestion, teamName }: { suggestion: WellnessSuggestion; teamName: string }) {
+function SuggestionCard({ suggestion, teamName, teamScore }: { suggestion: WellnessSuggestion; teamName: string; teamScore: number }) {
   const isCritical = suggestion.type === "critical";
+  const [expanded, setExpanded] = useState(false);
+
   return (
-    <div className={`p-3 rounded-lg border ${isCritical ? "bg-red-50 border-red-100" : "bg-green-50 border-green-100"}`}>
-      <div className="flex items-start gap-2">
-        {isCritical ? <XCircle className="w-4 h-4 text-red-500 mt-0.5 shrink-0" /> : <CheckCircle className="w-4 h-4 text-green-500 mt-0.5 shrink-0" />}
-        <div>
-          <p className="text-sm font-medium"><span className="text-gray-500">{teamName}:</span> {suggestion.message}</p>
-          <p className="text-xs text-gray-500 mt-1">→ {suggestion.action}</p>
+    <div
+      className={`rounded-xl border transition-all duration-300 overflow-hidden ${
+        isCritical
+          ? "bg-gradient-to-r from-red-50 to-white border-red-200 hover:shadow-md hover:border-red-300"
+          : "bg-gradient-to-r from-green-50 to-white border-green-200 hover:shadow-md hover:border-green-300"
+      }`}
+    >
+      <div className="p-4">
+        <div className="flex items-start gap-3">
+          <div className={`p-2 rounded-lg shrink-0 ${isCritical ? "bg-red-100" : "bg-green-100"}`}>
+            {isCritical ? <XCircle className="w-5 h-5 text-red-500" /> : <CheckCircle className="w-5 h-5 text-green-500" />}
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center justify-between gap-2">
+              <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${isCritical ? "bg-red-100 text-red-700" : "bg-green-100 text-green-700"}`}>
+                {teamName}
+              </span>
+              <span className={`text-xs font-medium ${getScoreColor(teamScore)}`}>
+                Score: {teamScore}
+              </span>
+            </div>
+            <p className="text-sm font-medium text-gray-800 mt-2 leading-relaxed">{suggestion.message}</p>
+            <button
+              type="button"
+              onClick={() => setExpanded(!expanded)}
+              className={`mt-2 text-xs font-medium flex items-center gap-1 transition-colors ${
+                isCritical ? "text-red-600 hover:text-red-800" : "text-green-600 hover:text-green-800"
+              }`}
+            >
+              {expanded ? "Ocultar acción" : "Ver acción recomendada"} →
+            </button>
+          </div>
         </div>
       </div>
+
+      {expanded && (
+        <div className={`px-4 pb-4 pt-0 animate-fade-in`}>
+          <div className={`p-3 rounded-lg ${isCritical ? "bg-red-50 border border-red-100" : "bg-green-50 border border-green-100"}`}>
+            <div className="flex items-start gap-2">
+              <Zap className={`w-4 h-4 mt-0.5 shrink-0 ${isCritical ? "text-red-400" : "text-green-400"}`} />
+              <div>
+                <p className="text-xs font-semibold text-gray-600 uppercase mb-1">Acción recomendada</p>
+                <p className="text-sm text-gray-700">{suggestion.action}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -568,12 +636,177 @@ function KudosWall({ onKudoSent }: { onKudoSent: (kudo: Kudos) => void }) {
   );
 }
 
+/* ─── Celebración Confetti ─── */
+
+function fireConfetti() {
+  confetti({
+    particleCount: 150,
+    spread: 80,
+    origin: { y: 0.6 },
+    colors: ["#00A651", "#FFC107", "#22c55e", "#3b82f6", "#f59e0b"],
+  });
+}
+
+/* ─── Mapa de Calor de Miembros ─── */
+
+function MemberHeatmap({ teams }: { teams: Team[] }) {
+  const moodColors: Record<string, string> = {
+    excelente: "bg-green-400",
+    bien: "bg-green-300",
+    neutral: "bg-yellow-400",
+    bajo: "bg-orange-400",
+    critico: "bg-red-500",
+  };
+
+  const moodEmojis: Record<string, string> = {
+    excelente: "😃",
+    bien: "🙂",
+    neutral: "😐",
+    bajo: "😟",
+    critico: "😫",
+  };
+
+  const users = getUsers();
+
+  return (
+    <section className="sb-ui-card sb-ui-card--elevated mb-6">
+      <div className="sb-ui-card__content">
+        <div className="flex items-center gap-2 mb-4">
+          <Users className="w-5 h-5 text-indigo-500" />
+          <h2 className="sb-ui-heading-h5">Mapa de Ánimo por Persona</h2>
+        </div>
+        <div className="space-y-4">
+          {teams.map((team) => (
+            <div key={team.id}>
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">{team.name}</p>
+              <div className="flex flex-wrap gap-2">
+                {team.memberMood.map((member) => {
+                  const userName = getUserName(member.userId, users);
+                  return (
+                    <div
+                      key={member.userId}
+                      className={`relative group w-10 h-10 rounded-full ${moodColors[member.mood]} flex items-center justify-center text-lg shadow-sm transition-transform hover:scale-125 cursor-default`}
+                      title={`${userName}: ${member.mood}`}
+                    >
+                      <span>{moodEmojis[member.mood]}</span>
+                      <div className="absolute -bottom-7 left-1/2 -translate-x-1/2 bg-gray-800 text-white text-xs px-2 py-0.5 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none z-10">
+                        {userName}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
+        <div className="flex items-center gap-3 mt-4 pt-3 border-t border-gray-100">
+          <span className="text-xs text-gray-400">Leyenda:</span>
+          {Object.entries(moodEmojis).map(([mood, emoji]) => (
+            <span key={mood} className="text-xs text-gray-500 flex items-center gap-1">
+              <span className={`w-3 h-3 rounded-full ${moodColors[mood]}`} />
+              {emoji} {mood}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Donut Chart — Distribución de Ánimo ─── */
+
+const DONUT_COLORS = ["#22c55e", "#84cc16", "#eab308", "#f97316", "#ef4444"];
+const MOOD_LABELS: Record<string, string> = {
+  excelente: "Excelente",
+  bien: "Bien",
+  neutral: "Neutral",
+  bajo: "Bajo",
+  critico: "Crítico",
+};
+
+function MoodDistributionChart({ teams }: { teams: Team[] }) {
+  const allMoods = teams.flatMap((t) => t.memberMood.map((m) => m.mood));
+  const distribution = Object.entries(MOOD_LABELS).map(([key, label]) => ({
+    name: label,
+    value: allMoods.filter((m) => m === key).length,
+  })).filter((d) => d.value > 0);
+
+  const total = allMoods.length;
+
+  return (
+    <section className="sb-ui-card sb-ui-card--elevated mb-6">
+      <div className="sb-ui-card__content">
+        <div className="flex items-center gap-2 mb-4">
+          <Heart className="w-5 h-5 text-pink-500" />
+          <h2 className="sb-ui-heading-h5">Distribución de Ánimo Global</h2>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="w-32 h-32">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie
+                  data={distribution}
+                  cx="50%"
+                  cy="50%"
+                  innerRadius={30}
+                  outerRadius={55}
+                  dataKey="value"
+                  animationDuration={800}
+                >
+                  {distribution.map((_, index) => (
+                    <Cell key={`cell-${index}`} fill={DONUT_COLORS[index % DONUT_COLORS.length]} />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(value: number) => [`${value} personas`, ""]} />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="flex-1 space-y-1.5">
+            {distribution.map((entry, idx) => (
+              <div key={entry.name} className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: DONUT_COLORS[idx % DONUT_COLORS.length] }} />
+                  <span className="text-sm text-gray-600">{entry.name}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-sm font-semibold">{entry.value}</span>
+                  <span className="text-xs text-gray-400">({Math.round((entry.value / total) * 100)}%)</span>
+                </div>
+              </div>
+            ))}
+            <div className="pt-1.5 border-t border-gray-100 flex justify-between">
+              <span className="text-xs text-gray-500 font-medium">Total</span>
+              <span className="text-xs font-bold text-gray-700">{total} personas</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Dark Mode Toggle ─── */
+
+function DarkModeToggle({ darkMode, onToggle }: { darkMode: boolean; onToggle: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onToggle}
+      className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+      aria-label={darkMode ? "Modo claro" : "Modo oscuro"}
+    >
+      {darkMode ? <Sun className="w-5 h-5 text-amber-500" /> : <Moon className="w-5 h-5 text-indigo-500" />}
+    </button>
+  );
+}
+
 /* ─── Page Layout (state lifted here for full interactivity) ─── */
 
 export function BienestarPage() {
   const [juryMood, setJuryMood] = useState<MoodValue | null>(null);
   const [toast, setToast] = useState<{ message: string; type: "success" | "warning" | "info" } | null>(null);
   const [timeline, setTimeline] = useState<TimelineEvent[]>([]);
+  const [darkMode, setDarkMode] = useState(false);
   const prevRiskRef = useRef<boolean>(true);
 
   const users = getUsers();
@@ -593,7 +826,7 @@ export function BienestarPage() {
     });
   }, [juryMood]);
 
-  /** Detectar cambios de estado de riesgo y emitir notificaciones. */
+  /** Detectar cambios de estado de riesgo y emitir notificaciones + confetti. */
   useEffect(() => {
     if (!juryMood) return;
 
@@ -605,6 +838,7 @@ export function BienestarPage() {
     if (prevRiskRef.current && !currentlyAtRisk) {
       setToast({ message: "🎉 ¡Siniestros salió del riesgo de burnout! El equipo está saludable.", type: "success" });
       addTimelineEvent("risk_resolved", "Siniestros salió del riesgo de burnout gracias a la mejora del ánimo", "✅");
+      fireConfetti();
     } else if (!prevRiskRef.current && currentlyAtRisk) {
       setToast({ message: "⚠️ Siniestros entró en riesgo de burnout. Se requiere atención.", type: "warning" });
       addTimelineEvent("risk_detected", "Se detectó riesgo de burnout en Siniestros", "🚨");
@@ -615,6 +849,11 @@ export function BienestarPage() {
 
     prevRiskRef.current = currentlyAtRisk;
   }, [juryMood, teams]);
+
+  /** Toggle dark mode en el body. */
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", darkMode);
+  }, [darkMode]);
 
   function addTimelineEvent(type: TimelineEvent["type"], message: string, icon: string) {
     setTimeline((prev) => [
@@ -629,22 +868,23 @@ export function BienestarPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className={`space-y-6 transition-colors duration-500 ${darkMode ? "dark" : ""}`}>
       {toast && <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />}
+      <DarkModeToggle darkMode={darkMode} onToggle={() => setDarkMode(!darkMode)} />
 
       <ExecutiveSummary teams={teams} />
 
       <NikoNikoThermometer selectedMood={juryMood} onSelectMood={setJuryMood} />
 
-      <SustainabilityIndex teams={teams} />
-
       <div className="sb-ui-grid">
         <div className="sb-ui-col-12 sb-ui-col-md-7">
+          <SustainabilityIndex teams={teams} />
           <BurnoutRadar teams={teams} />
           <ActionSuggestions teams={teams} />
-          <ActionTimeline events={timeline} />
         </div>
         <div className="sb-ui-col-12 sb-ui-col-md-5">
+          <MoodDistributionChart teams={teams} />
+          <MemberHeatmap teams={teams} />
           <TeamPulse teams={teams} />
           <KudosWall onKudoSent={handleKudoSent} />
         </div>

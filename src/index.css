@@ -1,4 +1,4 @@
-﻿@tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -47,4 +47,60 @@ body {
 
 .animate-float-delayed {
   animation: float-delayed 4s ease-in-out infinite 1s;
+}
+
+
+/* ─── Dark Mode ─── */
+
+.dark body,
+.dark .min-h-screen {
+  background-color: #1a1a2e !important;
+}
+
+.dark .sb-ui-card,
+.dark .sb-ui-card--elevated {
+  background-color: #16213e !important;
+  border-color: #0f3460 !important;
+  color: #e0e0e0 !important;
+}
+
+.dark .bg-white {
+  background-color: #16213e !important;
+}
+
+.dark .bg-gray-50,
+.dark .bg-bolivar-gray-bg {
+  background-color: #0f3460 !important;
+}
+
+.dark .text-gray-500,
+.dark .text-gray-600,
+.dark .text-gray-700 {
+  color: #b0b0b0 !important;
+}
+
+.dark .text-gray-400 {
+  color: #888 !important;
+}
+
+.dark .border-bolivar-gray-light,
+.dark .border-gray-100,
+.dark .border-gray-200,
+.dark .border-gray-300 {
+  border-color: #0f3460 !important;
+}
+
+.dark .sb-ui-heading-h5,
+.dark .font-medium,
+.dark .font-semibold,
+.dark .font-bold {
+  color: #f0f0f0 !important;
+}
+
+.dark select,
+.dark textarea,
+.dark input {
+  background-color: #0f3460 !important;
+  color: #e0e0e0 !important;
+  border-color: #1a3a6b !important;
 }
