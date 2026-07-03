@@ -1,5 +1,5 @@
 import mockData from "./mock-data.json";
-import type { MockData, Team, User, Initiative, Kudos, MoodHistory, WellnessSuggestion } from "../types";
+import type { MockData, Team, User, Initiative, Kudos, ObservabilityMetrics } from "../types";
 
 const data: MockData = mockData as MockData;
 
@@ -23,26 +23,6 @@ export function getKudos(): Kudos[] {
  return data.kudos;
 }
 
-/** Obtiene el historial de ánimo semanal. */
-export function getMoodHistory(): MoodHistory[] {
- return data.moodHistory;
-}
-
-/** Obtiene el historial de ánimo por equipo. */
-export function getMoodHistoryByTeam(teamId: string): MoodHistory[] {
- return data.moodHistory.filter((m) => m.teamId === teamId);
-}
-
-/** Obtiene sugerencias de bienestar. */
-export function getWellnessSuggestions(): WellnessSuggestion[] {
- return data.wellnessSuggestions;
-}
-
-/** Obtiene sugerencias por equipo. */
-export function getWellnessSuggestionsByTeam(teamId: string): WellnessSuggestion[] {
- return data.wellnessSuggestions.filter((s) => s.teamId === teamId);
-}
-
 /** Obtiene un equipo por ID. */
 export function getTeamById(teamId: string): Team | undefined {
  return data.teams.find((t) => t.id === teamId);
@@ -56,4 +36,26 @@ export function getUsersByTeam(teamId: string): User[] {
 /** Obtiene iniciativas por equipo. */
 export function getInitiativesByTeam(teamId: string): Initiative[] {
  return data.initiatives.filter((i) => i.teamId === teamId);
+}
+
+/** Obtiene métricas de observabilidad para un equipo dado. */
+export function getObservabilityMetrics(teamId: string): ObservabilityMetrics | undefined {
+ const team = data.teams.find((t) => t.id === teamId);
+ if (!team) return undefined;
+
+ if (team.observabilityMetrics) {
+  return team.observabilityMetrics;
+ }
+
+ const traditionalCycleTime = team.doraMetrics.leadTimeForChanges;
+ const aiCycleTime = Math.round(traditionalCycleTime * 0.7 * 10) / 10;
+
+ return {
+  deploymentFrequency: team.doraMetrics.deploymentFrequency,
+  cycleTime: traditionalCycleTime,
+  wipActual: team.wipCurrent,
+  wipLimit: team.wipLimit,
+  aiCycleTime,
+  traditionalCycleTime,
+ };
 }

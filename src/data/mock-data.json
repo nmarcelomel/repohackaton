@@ -11,11 +11,20 @@
  "changeFailureRate": 8,
  "mttr": 1.5
  },
+ "observabilityMetrics": {
+ "deploymentFrequency": 12,
+ "cycleTime": 4.2,
+ "wipActual": 3,
+ "wipLimit": 5,
+ "aiCycleTime": 2.9,
+ "traditionalCycleTime": 4.2
+ },
  "memberMood": [
  { "userId": "user-01", "mood": "excelente", "date": "2026-07-01" },
  { "userId": "user-02", "mood": "bien", "date": "2026-07-01" },
  { "userId": "user-03", "mood": "neutral", "date": "2026-07-01" }
- ]
+ ],
+ "previousLeadTimeForChanges": 6.5
  },
  {
  "id": "team-siniestros",
@@ -28,11 +37,20 @@
  "changeFailureRate": 15,
  "mttr": 4.0
  },
+ "observabilityMetrics": {
+ "deploymentFrequency": 6,
+ "cycleTime": 12.5,
+ "wipActual": 7,
+ "wipLimit": 5,
+ "aiCycleTime": 8.8,
+ "traditionalCycleTime": 12.5
+ },
  "memberMood": [
  { "userId": "user-04", "mood": "neutral", "date": "2026-07-01" },
  { "userId": "user-05", "mood": "bajo", "date": "2026-07-01" },
  { "userId": "user-06", "mood": "critico", "date": "2026-07-01" }
- ]
+ ],
+ "previousLeadTimeForChanges": 15.0
  },
  {
  "id": "team-emision",
@@ -45,11 +63,20 @@
  "changeFailureRate": 10,
  "mttr": 2.3
  },
+ "observabilityMetrics": {
+ "deploymentFrequency": 8,
+ "cycleTime": 7.8,
+ "wipActual": 4,
+ "wipLimit": 5,
+ "aiCycleTime": 5.5,
+ "traditionalCycleTime": 7.8
+ },
  "memberMood": [
  { "userId": "user-07", "mood": "excelente", "date": "2026-07-01" },
  { "userId": "user-08", "mood": "excelente", "date": "2026-07-01" },
  { "userId": "user-09", "mood": "bien", "date": "2026-07-01" }
- ]
+ ],
+ "previousLeadTimeForChanges": 9.0
  }
  ],
  "users": [

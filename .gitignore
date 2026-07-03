@@ -1,4 +1,4 @@
-.DS_Store
+﻿.DS_Store
 node_modules/
 .env
 .env.*
@@ -15,3 +15,8 @@ dist/
 
 # Tailwind/Vite cache
 .cache/
+.npmrc
+backend/.env
+backend/engineering_intelligence.db
+backend/engineering_intelligence.db-shm
+backend/engineering_intelligence.db-wal
