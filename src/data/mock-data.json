@@ -112,10 +112,12 @@
  { "teamId": "team-emision", "week": "2026-W27", "avgMood": 4.7 }
  ],
  "wellnessSuggestions": [
- { "teamId": "team-siniestros", "type": "critical", "message": "Redistribuir 2 items del WIP de Siniestros a células con capacidad disponible", "action": "Mover tareas a OpenFinance o Emisión" },
- { "teamId": "team-siniestros", "type": "critical", "message": "Programar 1:1 urgente con miembros en estado crítico", "action": "Agendar con Andrés y María Fernanda" },
- { "teamId": "team-openfinance", "type": "positive", "message": "Equipo con buen balance carga/ánimo. Considerar asumir tareas de soporte", "action": "Ofrecer capacity a Siniestros" },
- { "teamId": "team-emision", "type": "positive", "message": "Ánimo en tendencia alcista. Buen momento para iniciativas de innovación", "action": "Proponer spike técnico o hackathon interno" }
+ { "teamId": "team-siniestros", "type": "critical", "message": "Redistribuir 2 items del WIP de Siniestros a células con capacidad disponible", "action": "Mover las tareas SIN-234 y SIN-245 a OpenFinance que tiene 2 slots libres. Coordinar con Carlos Martínez." },
+ { "teamId": "team-siniestros", "type": "critical", "message": "Programar 1:1 urgente con miembros en estado crítico del equipo", "action": "Agendar reunión privada con Andrés Rojas y María Fernanda Ruiz esta semana. Usar guía de bienestar corporativa." },
+ { "teamId": "team-siniestros", "type": "critical", "message": "Revisar carga de reuniones: el equipo tiene 28h/semana en meetings", "action": "Cancelar dailies duplicadas y reducir a 2 ceremonias semanales. Liberar mínimo 6 horas." },
+ { "teamId": "team-openfinance", "type": "positive", "message": "Equipo con excelente balance carga/ánimo. Potencial para mentorear a otras células", "action": "Proponer a Carlos como mentor de Siniestros en prácticas de WIP management y flow engineering." },
+ { "teamId": "team-emision", "type": "positive", "message": "Ánimo en tendencia alcista por 4ta semana consecutiva. Momento ideal para innovación", "action": "Aprobar el spike técnico de migración a event sourcing. El equipo tiene energía y momentum." },
+ { "teamId": "team-emision", "type": "positive", "message": "Deploy frequency de 8/semana con 0% failure rate en últimas 2 semanas", "action": "Reconocer públicamente al equipo en el town hall. Documentar prácticas como caso de éxito interno." }
  ],
  "kudos": [
  { "id": "kudos-01", "fromUserId": "user-01", "toUserId": "user-02", "message": "Excelente trabajo en la integración del API de pagos. Tu solución fue elegante y eficiente.", "category": "calidad", "date": "2026-06-28" },
