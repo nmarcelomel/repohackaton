@@ -3,6 +3,7 @@ import { getInitiatives, getTeams } from "../../data/data-service";
 import { ValueChart } from "./ValueChart";
 import { AlignmentChart } from "./AlignmentChart";
 import { IntakeForm } from "./IntakeForm";
+import { StatusChipWithInsight } from "./StatusChipWithInsight";
 
 const statusConfig: Record<string, { label: string; chipClass: string }> = {
  en_progreso: { label: "En progreso", chipClass: "sb-ui-chip--info sb-ui-chip--soft" },
@@ -82,9 +83,11 @@ export function NegocioPage() {
  <td>${init.projectedValue.toLocaleString()}M</td>
  <td>${init.actualValue.toLocaleString()}M</td>
  <td>
- <span className={`sb-ui-chip sb-ui-chip--sm ${config.chipClass}`}>
- <span className="sb-ui-chip__label">{config.label}</span>
- </span>
+ <StatusChipWithInsight
+ initiative={init}
+ chipClass={`sb-ui-chip--sm ${config.chipClass}`}
+ label={config.label}
+ />
  </td>
  </tr>
  );
