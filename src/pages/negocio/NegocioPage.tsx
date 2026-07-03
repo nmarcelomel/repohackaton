@@ -1,5 +1,8 @@
 import { TrendingUp, TrendingDown } from "lucide-react";
 import { getInitiatives, getTeams } from "../../data/data-service";
+import { ValueChart } from "./ValueChart";
+import { AlignmentChart } from "./AlignmentChart";
+import { IntakeForm } from "./IntakeForm";
 
 const statusConfig: Record<string, { label: string; chipClass: string }> = {
  en_progreso: { label: "En progreso", chipClass: "sb-ui-chip--info sb-ui-chip--soft" },
@@ -89,6 +92,30 @@ export function NegocioPage() {
  </tbody>
  </table>
  </div>
+ </div>
+ </article>
+
+ {/* Charts Section */}
+ <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+ <article className="sb-ui-card sb-ui-card--elevated">
+ <div className="sb-ui-card__content">
+ <h3 className="sb-ui-heading-h6 mb-4">Valor Prometido vs. Realizado</h3>
+ <ValueChart initiatives={initiatives} />
+ </div>
+ </article>
+ <article className="sb-ui-card sb-ui-card--elevated">
+ <div className="sb-ui-card__content">
+ <h3 className="sb-ui-heading-h6 mb-4">Alineación Estratégica</h3>
+ <AlignmentChart initiatives={initiatives} />
+ </div>
+ </article>
+ </div>
+
+ {/* Intake Form Section */}
+ <article className="sb-ui-card sb-ui-card--elevated">
+ <div className="sb-ui-card__content">
+ <h3 className="sb-ui-heading-h6 mb-4">Registrar Nueva Iniciativa</h3>
+ <IntakeForm />
  </div>
  </article>
  </div>
