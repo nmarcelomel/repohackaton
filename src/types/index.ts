@@ -18,6 +18,7 @@ export interface Team {
  wipCurrent: number;
  doraMetrics: DoraMetrics;
  memberMood: MemberMood[];
+ previousLeadTimeForChanges?: number;
 }
 
 export interface Skill {
@@ -52,24 +53,9 @@ export interface Kudos {
  date: string;
 }
 
-export interface MoodHistory {
- teamId: string;
- week: string;
- avgMood: number;
-}
-
-export interface WellnessSuggestion {
- teamId: string;
- type: "critical" | "positive";
- message: string;
- action: string;
-}
-
 export interface MockData {
  teams: Team[];
  users: User[];
  initiatives: Initiative[];
  kudos: Kudos[];
- moodHistory: MoodHistory[];
- wellnessSuggestions: WellnessSuggestion[];
 }
