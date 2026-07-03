@@ -1,4 +1,4 @@
-export interface DoraMetrics {
+﻿export interface DoraMetrics {
  deploymentFrequency: number;
  leadTimeForChanges: number;
  changeFailureRate: number;
@@ -18,6 +18,7 @@ export interface Team {
  wipCurrent: number;
  doraMetrics: DoraMetrics;
  memberMood: MemberMood[];
+ previousLeadTimeForChanges?: number;
 }
 
 export interface Skill {

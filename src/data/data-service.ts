@@ -1,4 +1,4 @@
-import mockData from "./mock-data.json";
+﻿import mockData from "./mock-data.json";
 import type { MockData, Team, User, Initiative, Kudos, MoodHistory, WellnessSuggestion } from "../types";
 
 const data: MockData = mockData as MockData;
