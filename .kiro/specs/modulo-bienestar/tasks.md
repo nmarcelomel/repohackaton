@@ -1,4 +1,4 @@
-# Plan de Implementación: Módulo de Bienestar — Testing y Refactoring
+﻿# Plan de Implementación: Módulo de Bienestar — Testing y Refactoring
 
 ## Resumen
 

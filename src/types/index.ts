@@ -1,4 +1,4 @@
-export interface DoraMetrics {
+﻿export interface DoraMetrics {
  deploymentFrequency: number;
  leadTimeForChanges: number;
  changeFailureRate: number;
@@ -53,9 +53,24 @@ export interface Kudos {
  date: string;
 }
 
+export interface MoodHistory {
+ teamId: string;
+ week: string;
+ avgMood: number;
+}
+
+export interface WellnessSuggestion {
+ teamId: string;
+ type: "critical" | "positive";
+ message: string;
+ action: string;
+}
+
 export interface MockData {
  teams: Team[];
  users: User[];
  initiatives: Initiative[];
  kudos: Kudos[];
+ moodHistory: MoodHistory[];
+ wellnessSuggestions: WellnessSuggestion[];
 }

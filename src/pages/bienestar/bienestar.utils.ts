@@ -1,4 +1,4 @@
-import type { Team, User, Kudos } from "../../types";
+﻿import type { Team, User, Kudos } from "../../types";
 
 export const MOOD_SCORE: Record<string, number> = {
   excelente: 5,
