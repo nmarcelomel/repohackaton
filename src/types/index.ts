@@ -17,6 +17,7 @@ export interface Team {
  wipLimit: number;
  wipCurrent: number;
  doraMetrics: DoraMetrics;
+ observabilityMetrics?: ObservabilityMetrics;
  memberMood: MemberMood[];
  previousLeadTimeForChanges?: number;
 }
@@ -53,17 +54,24 @@ export interface Kudos {
  date: string;
 }
 
-export interface MoodHistory {
- teamId: string;
- week: string;
- avgMood: number;
+export interface ObservabilityMetrics {
+ deploymentFrequency: number;
+ cycleTime: number;
+ wipActual: number;
+ wipLimit: number;
+ aiCycleTime: number;
+ traditionalCycleTime: number;
 }
 
-export interface WellnessSuggestion {
+export interface TeamOverloadState {
  teamId: string;
- type: "critical" | "positive";
- message: string;
- action: string;
+ isOverloaded: boolean;
+}
+
+export interface TeamStateContextType {
+ teamStates: TeamOverloadState[];
+ updateTeamOverloadState: (teamId: string, isOverloaded: boolean) => void;
+ isTeamOverloaded: (teamId: string) => boolean;
 }
 
 export interface MockData {
@@ -71,6 +79,4 @@ export interface MockData {
  users: User[];
  initiatives: Initiative[];
  kudos: Kudos[];
- moodHistory: MoodHistory[];
- wellnessSuggestions: WellnessSuggestion[];
 }
