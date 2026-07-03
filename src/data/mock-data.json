@@ -21,7 +21,7 @@
  "id": "team-siniestros",
  "name": "Siniestros",
  "wipLimit": 5,
- "wipCurrent": 5,
+ "wipCurrent": 7,
  "doraMetrics": {
  "deploymentFrequency": 6,
  "leadTimeForChanges": 12.5,
@@ -29,9 +29,9 @@
  "mttr": 4.0
  },
  "memberMood": [
- { "userId": "user-04", "mood": "bien", "date": "2026-07-01" },
+ { "userId": "user-04", "mood": "neutral", "date": "2026-07-01" },
  { "userId": "user-05", "mood": "bajo", "date": "2026-07-01" },
- { "userId": "user-06", "mood": "neutral", "date": "2026-07-01" }
+ { "userId": "user-06", "mood": "critico", "date": "2026-07-01" }
  ]
  },
  {
@@ -69,6 +69,26 @@
  { "id": "init-03", "name": "Motor de Emisión v2", "teamId": "team-emision", "projectedValue": 1500, "actualValue": 600, "status": "en_riesgo" },
  { "id": "init-04", "name": "API Open Banking", "teamId": "team-openfinance", "projectedValue": 2000, "actualValue": 1800, "status": "en_progreso" },
  { "id": "init-05", "name": "Chatbot Siniestros", "teamId": "team-siniestros", "projectedValue": 500, "actualValue": 520, "status": "completada" }
+ ],
+ "moodHistory": [
+ { "teamId": "team-openfinance", "week": "2026-W24", "avgMood": 4.1 },
+ { "teamId": "team-openfinance", "week": "2026-W25", "avgMood": 3.8 },
+ { "teamId": "team-openfinance", "week": "2026-W26", "avgMood": 4.0 },
+ { "teamId": "team-openfinance", "week": "2026-W27", "avgMood": 4.0 },
+ { "teamId": "team-siniestros", "week": "2026-W24", "avgMood": 3.5 },
+ { "teamId": "team-siniestros", "week": "2026-W25", "avgMood": 3.0 },
+ { "teamId": "team-siniestros", "week": "2026-W26", "avgMood": 2.5 },
+ { "teamId": "team-siniestros", "week": "2026-W27", "avgMood": 2.0 },
+ { "teamId": "team-emision", "week": "2026-W24", "avgMood": 4.3 },
+ { "teamId": "team-emision", "week": "2026-W25", "avgMood": 4.5 },
+ { "teamId": "team-emision", "week": "2026-W26", "avgMood": 4.6 },
+ { "teamId": "team-emision", "week": "2026-W27", "avgMood": 4.7 }
+ ],
+ "wellnessSuggestions": [
+ { "teamId": "team-siniestros", "type": "critical", "message": "Redistribuir 2 items del WIP de Siniestros a células con capacidad disponible", "action": "Mover tareas a OpenFinance o Emisión" },
+ { "teamId": "team-siniestros", "type": "critical", "message": "Programar 1:1 urgente con miembros en estado crítico", "action": "Agendar con Andrés y María Fernanda" },
+ { "teamId": "team-openfinance", "type": "positive", "message": "Equipo con buen balance carga/ánimo. Considerar asumir tareas de soporte", "action": "Ofrecer capacity a Siniestros" },
+ { "teamId": "team-emision", "type": "positive", "message": "Ánimo en tendencia alcista. Buen momento para iniciativas de innovación", "action": "Proponer spike técnico o hackathon interno" }
  ],
  "kudos": [
  { "id": "kudos-01", "fromUserId": "user-01", "toUserId": "user-02", "message": "Excelente trabajo en la integración del API de pagos. Tu solución fue elegante y eficiente.", "category": "calidad", "date": "2026-06-28" },
